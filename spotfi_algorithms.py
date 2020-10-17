@@ -1,4 +1,4 @@
-from __future__ import print_function, absolute_import, division
+
 from cmath import phase
 import numpy as np
 import math
@@ -22,9 +22,9 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 def spotfi_algorithm_1_package_one(csi_matrix):
     R = abs(csi_matrix)
-    phase_matrix = np.vstack((np.unwrap(map(phase,csi_matrix[0,:])),np.unwrap(map(phase,csi_matrix[1,:])),np.unwrap(map(phase,csi_matrix[2,:]))))
+    phase_matrix = np.vstack((np.unwrap(list(map(phase,csi_matrix[0,:]))),np.unwrap(list(map(phase,csi_matrix[1,:]))),np.unwrap(list(map(phase,csi_matrix[2,:])))))
     fit_X = np.concatenate((np.linspace(1,30,30),np.linspace(1,30,30),np.linspace(1,30,30)))
-    fit_Y = np.concatenate((np.unwrap(map(phase,csi_matrix[0,:])),np.unwrap(map(phase,csi_matrix[1,:])),np.unwrap(map(phase,csi_matrix[2,:]))))
+    fit_Y = np.concatenate((np.unwrap(list(map(phase,csi_matrix[0,:]))),np.unwrap(list(map(phase,csi_matrix[1,:]))),np.unwrap(list(map(phase,csi_matrix[2,:])))))
     tau_offset = np.polyfit(fit_X,fit_Y,1)[0]
     C = np.zeros((3,30),dtype=np.complex_)
     for m in range(phase_matrix.shape[0]):
@@ -133,7 +133,7 @@ def aoa_tof_music(x, antenna_distance, frequency, sub_freq_delta, theta_range, t
     num_computed_paths = len(w) - index_in_eigenvalues + 1
 
     # Estimate noise subspace
-    column_indices = range(0, (len(w) - num_computed_paths))
+    column_indices = list(range(0, (len(w) - num_computed_paths)))
     eigenvectors = v[:, list(column_indices)]
 
     # Peak search
@@ -156,6 +156,7 @@ def aoa_tof_music(x, antenna_distance, frequency, sub_freq_delta, theta_range, t
     return maximum_idx_array
 
 def csi_plot(theta1, theta2, d):
+    # print(f"DEBUG: theta1= {theta1}   theta2= {theta2}    d= {d}")
     rad1 = theta1*math.pi/180
     rad2 = theta2*math.pi/180
 
@@ -170,8 +171,10 @@ def csi_plot(theta1, theta2, d):
     else:
         k1 = math.tan(0.5*math.pi+rad1)
         k2 = math.tan(0.5*math.pi+rad2)
-        x = d*k2/(k2-k1)+1
-        y = d*k1*k2/(k2-k1)
+        # print(f"DEBUG: k1= {k1}   k2= {k2}")
+        x = d*k2/((k2-k1)+1)
+        y = d*k1*k2/((k2-k1)+1)
+
 
     X = [1,1+d]
     Y = [0,0]

@@ -1,5 +1,5 @@
 # coding: utf-8
-from __future__ import print_function, absolute_import, division
+
 import pandas as pd
 import scipy.cluster.hierarchy as sch
 import load_csi_data
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     C, tau_offset = spotfi_algorithms.spotfi_algorithm_1_package_one(csi_matrix)
 
     all_maximum_idx_array = np.zeros(2)
-    for i in tqdm(range(file_data.shape[0])):
+    for i in tqdm(list(range(file_data.shape[0]))):
     #for i in tqdm(range(20)):
         csi_entry = file_data.loc[i]
         csi = load_csi_data.get_scale_csi(csi_entry)

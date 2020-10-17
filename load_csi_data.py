@@ -1,11 +1,12 @@
 # coding: utf-8
 # Authorized to zhaoxin03@ppdai.com
 
-from __future__ import print_function, absolute_import, division
+
 import pandas as pd
 import numpy as np
 # import scipy.io as sio
 import math
+from binascii import hexlify
 import os
 import matplotlib
 
@@ -76,10 +77,10 @@ def read_bf_file(filename):
     data_len = os.path.getsize(filename)
     #print(data_len)
     while cur < (data_len - 3):
-        field_len = int(f.read(2).encode('hex'),16)
-        code = int(f.read(1).encode('hex'),16)
+        # import pdb; pdb.set_trace()
+        field_len = int(hexlify(f.read(2)),16)
+        code = int(hexlify(f.read(1)),16)
         cur = cur + 3
-
 
         if code == 187:
             bytes = np.fromfile(f,np.uint8,count = field_len - 1)
